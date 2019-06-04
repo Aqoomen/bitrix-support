@@ -24,7 +24,7 @@ class Form
         }
 
         $this->toEmail = $toEmail;
-        $this->fields = $fields;
+        $this->post = $post;
 
     }
 
