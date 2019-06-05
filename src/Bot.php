@@ -1,5 +1,5 @@
 <?php
-namespace iPremium\Bitrix\Support;
+namespace Aqoomen\Bitrix\Support;
 
 class Bot
 {
@@ -28,5 +28,10 @@ class Bot
         if (self::check($post['_token'])) {
             call_user_func_array($func, array($post));
         }
+    }
+
+    public function html() 
+    { 
+
     }
 }
