@@ -25,7 +25,7 @@ class Form
     protected $event;
 
 
-    public function __construct(Post $post)
+    public function __construct($post)
     {
         $this->post(new Post($post));
     }
