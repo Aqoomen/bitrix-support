@@ -3,7 +3,7 @@
     "description": "this is short tools for bitrix",
     "type": "library",
     "version":"1.6.1",
-    "license": "GNU General Public License",
+    "license": "MIT",
     "authors": [
         {
             "name": "Vladislav P.",
