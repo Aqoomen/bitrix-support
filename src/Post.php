@@ -1,6 +1,6 @@
 <?php
 
-namespace iPremium\Bitrix\Support;
+namespace Aqoomen\Bitrix\Support;
 
 class Post 
 {

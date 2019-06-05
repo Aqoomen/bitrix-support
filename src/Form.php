@@ -1,8 +1,8 @@
 <?php
 
-namespace iPremium\Bitrix\Support;
+namespace Aqoomen\Bitrix\Support;
 
-use iPremium\Bitrix\Support\Post;
+use Aqoomen\Bitrix\Support\Post;
 
 class Form
 {
