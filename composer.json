@@ -2,7 +2,7 @@
     "name": "aqoomen/bitrix-support",
     "description": "this is short tools for bitrix",
     "type": "library",
-    "version":"1.2.2",
+    "version":"1.2.3",
     "license": "MIT",
     "authors": [
         {
