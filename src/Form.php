@@ -76,14 +76,14 @@ class Form
         $form = new static($post);
 
         if (is_callable($func)) {
-            return call_user_func($func, [
+            return call_user_func_array($func, [
                 $form
             ]);
         }
 
     }
 
-    public function mame($name = null)
+    public function name($name = null)
     {
         if (!is_null($name))
         {
