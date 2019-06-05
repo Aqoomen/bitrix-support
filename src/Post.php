@@ -21,7 +21,7 @@ class Post
         //echo strtoupper($name);
         if (array_key_exists(strtoupper($name), $this->atributes))
         {
-            return $this->atributes[strtoupper($name)];
+            return $this->atributes[$name];
         }
         else
         {
