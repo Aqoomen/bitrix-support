@@ -6,21 +6,9 @@ class Post
 {
     public $attributes;
 
-    public static $_instance;
-
-    protected function __construct()
+    protected function __construct($post)
     {
-        $this->attributes = $_POST;
-    }
-
-    public static function getInstance()
-    {
-        if (is_null(self::$_instance)) {
-            static::$_instance = new static;
-        }
-
-        return static::$_instance;
-        
+        $this->attributes = $post;
     }
 
     public function all()

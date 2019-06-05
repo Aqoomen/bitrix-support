@@ -6,33 +6,74 @@ use iPremium\Bitrix\Support\Post;
 
 class Form
 {
-    public $fields;
+    protected $fields;
 
-    public $post;
+    protected $post;
 
-    public $iblockId;
+    protected $iblock;
 
-    public $toEmail;
+    protected $return;
 
-    public $return;
+    protected $email;
+
+    protected $detail;
+
+    protected $preview;
+
+    protected $name;
+
+    protected $event;
 
 
-    public function __construct($toEmail, Post $post, $iblockId = false)
+    public function __construct(Post $post)
     {
-        if ($iblockId) {
-            $this->iblockId = $iblockId;
-        }
-
-        $this->toEmail = $toEmail;
-        $this->post = $post;
-
+        $this->post(new Post($post));
     }
 
-    public function create($toEmail, $iblockId, $func)
+    public function to($email = null)
     {
-        $post = new Post();
+        if (!is_null($email))
+        {
+            $this->email = $email;
+        }
 
-        $form = new static($toEmail, $post, $iblockId);
+        return $this->email;
+ 
+    }
+
+    public function post($post = null)
+    {
+        if (!is_null($post))
+        {
+            $this->post = $post;
+        }
+
+        return $this->post;
+    }
+
+    public function iblock($iblock = null)
+    {
+        if (!is_null($iblock))
+        {
+            $this->iblock = $iblock;
+        }
+
+        return $this->iblock;
+    }
+
+    public function event($event = null)
+    {
+        if (!is_null($event))
+        {
+            $this->event = $event;
+        }
+
+        return $this->event;
+    }
+
+    public function create(Post $post, $func)
+    {
+        $form = new static();
 
         if (is_callable($func)) {
             return call_user_func($func, [
@@ -42,22 +83,56 @@ class Form
 
     }
 
-    public function add($name, $text = '', $section_id = 0) 
+    public function mame($name = null)
+    {
+        if (!is_null($name))
+        {
+            $this->name = $name;
+        }
+
+        return $this->name;
+    }
+
+    public function text($text, $flag = 'D')
+    {
+        switch($flag) {
+            case 'D':
+                $this->detail = $text;
+                break;
+            case 'P':
+                $this->preview = $text;
+                break;
+        }
+    }
+
+    protected function prepareFields($params)
+    {
+        foreach ($params as &$param) {
+            $param = strtoupper($param);
+        }
+
+        return $params;
+    }
+
+    protected function element($sectionId = 0)
+    {
+        return $fields = [
+            "IBLOCK_ID" => $this->iblock, //Нужный ИБ
+            "IBLOCK_SECTION_ID" => $sectionId, //Нужный раздел
+            "NAME" => $this->name, //Название элемента
+            "ACTIVE" => "N",
+            "PROPERTY_VALUES" => prepareFields($this->fields),
+        ];
+
+    }
+
+    public function add($sectionId = 0) 
     {
         if (\CModule::IncludeModule("iblock")) {
 
-            $arElFields=array(
-                    "IBLOCK_ID" => $this->iblockId, //Нужный ИБ
-                    "IBLOCK_SECTION_ID" => $section_id, //Нужный раздел
-                    "NAME" => $name, //Название элемента
-                    "ACTIVE" => "N",
-                    "PREVIEW_TEXT" => $text,
-                    "PROPERTY_VALUES" => $this->fields,
-                );
-
             $oElement = new \CIBlockElement();
 
-            if($oElement->add($arElFields, false, false, false)){
+            if($oElement->add($this->element(), false, false, false)){
 
                 $this->return = ["error" => false];
 
@@ -82,19 +157,26 @@ class Form
         $this->fields = $fields; 
     }
 
-    public function sendToEmail($event)
+    public function getFileds()
+    {
+        return $this->fields;
+    }
+
+
+
+    public function sendToEmail()
     {
         if (!empty($this->fields)) {
-            return \CEvent::Send($event, SITE_ID, $this->fields);
+            return \CEvent::Send($this->event, SITE_ID, $this->fields);
         } else {
             return false;
         }
 
     }
 
-    public function send($event)
+    public function send()
     {
-        if ($this->sendToEmail($event)) {
+        if ($this->sendToEmail()) {
 
             $this->return = ["error" => false];
 
@@ -121,4 +203,23 @@ class Form
     {
         return json_encode($this->return);
     }
+
+    public function __get($name)
+    {
+        //echo strtoupper($name);
+        if (array_key_exists(strtoupper($name), $this->fields))
+        {
+            return $this->fields[strtoupper($name)];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function __set($name, $value)
+    {
+        $this->fields[strtoupper($name)] = $value;
+    }
+
 }
