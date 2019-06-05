@@ -6,7 +6,7 @@ class Post
 {
     public $attributes;
 
-    protected function __construct($post)
+    public function __construct($post)
     {
         $this->attributes = $post;
     }

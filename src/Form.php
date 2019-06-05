@@ -71,9 +71,9 @@ class Form
         return $this->event;
     }
 
-    public function create(Post $post, $func)
+    public function create($post, $func)
     {
-        $form = new static();
+        $form = new static($post);
 
         if (is_callable($func)) {
             return call_user_func($func, [
