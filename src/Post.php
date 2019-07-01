@@ -2,7 +2,7 @@
 
 namespace Aqoomen\Bitrix\Support;
 
-class Post 
+class Post
 {
     public $attributes;
 
@@ -18,20 +18,20 @@ class Post
 
     public function __get($name)
     {
-        //echo strtoupper($name);
-        if (array_key_exists(strtoupper($name), $this->atributes))
+        //echo $name;
+        if (array_key_exists($name, $this->attributes))
         {
-            return $this->atributes[$name];
+            return $this->attributes[$name];
         }
         else
         {
             return null;
         }
     }
-    
+
     public function __set($name, $value)
     {
-        $this->atributes[$name] = $value;
+        $this->attributes[$name] = $value;
     }
 
 }
