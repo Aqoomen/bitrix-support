@@ -38,7 +38,7 @@ class Form
         }
 
         return $this->email;
- 
+
     }
 
     public function post($post = null)
@@ -116,17 +116,29 @@ class Form
 
     protected function element($sectionId = 0)
     {
-        return $fields = [
+        $fields = [
             "IBLOCK_ID" => $this->iblock, //Нужный ИБ
             "IBLOCK_SECTION_ID" => $sectionId, //Нужный раздел
             "NAME" => $this->name, //Название элемента
             "ACTIVE" => "N",
-            "PROPERTY_VALUES" => prepareFields($this->fields),
+            "PROPERTY_VALUES" => $this->prepareFields($this->fields),
         ];
+
+        if (!is_null($this->preview))
+        {
+            $fields['PREVIEW_TEXT'] = $this->preview;
+        }
+        else
+        {
+            $fields['DETAIL_TEXT'] = $this->detail;
+        }
+
+
+        return $fields;
 
     }
 
-    public function add($sectionId = 0) 
+    public function add($sectionId = 0)
     {
         if (\CModule::IncludeModule("iblock")) {
 
@@ -136,7 +148,7 @@ class Form
 
                 $this->return = ["error" => false];
 
-                array_push($this->return["list"], ["message" => "add() ok", "code" => 1 ]);
+                $this->return["list"][] = ["message" => "add() ok", "code" => 1 ];
 
                 return $this;
 
@@ -144,7 +156,7 @@ class Form
 
                 $this->return = ["error" => true];
 
-                array_push($this->return["list"], ["message" => "add() error", "code" => 300 ]);
+                $this->return["list"][] = ["message" => "add() error", "code" => 300 ];
 
                 return $this;
             }
@@ -154,7 +166,7 @@ class Form
 
     public function setFileds($fields = [])
     {
-        $this->fields = $fields; 
+        $this->fields = $fields;
     }
 
     public function getFileds()
@@ -180,7 +192,7 @@ class Form
 
             $this->return = ["error" => false];
 
-            array_push($this->return["list"], ["message" => "send() ok", "code" => 1 ]);
+            $this->return["list"][] = ["message" => "send() ok", "code" => 1 ];
 
             return $this;
 
@@ -188,7 +200,9 @@ class Form
 
             $this->return = ["error" => true];
 
-            array_push($this->return["list"], ["message" => "send() error", "code" => 200 ]);
+            echo "send() error";
+
+            $this->return["list"][] = ["message" => "send() error", "code" => 200 ];
 
             return $this;
         }
